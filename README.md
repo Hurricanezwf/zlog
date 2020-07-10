@@ -46,4 +46,8 @@ func (m *Module) DoSomething(ctx context.Context) {
 	ctx = zlog.CopyContextValue(m.ctx, ctx)
 	m.logger.Info(ctx, "start to do something ...")
 }
+
+
+// Example Output:
+2020/07/10 08:55:44 main.go:31:  INFO  --- [ app-demo | main.Module | 696ce42f-a56c-40a7-accf-035671b81ca6 ] :   start to do something ...
 ```
