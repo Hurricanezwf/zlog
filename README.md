@@ -14,9 +14,36 @@
 # 快速上手
 
 ```Go
-func Demo() {
-    ctx := log.WithTraceId(context.Background(), "696ce42f-a56c-40a7-accf-035671b81ca6")
-    logger := log.NewLogFactory().DefaultLogger(log.LevelDebug)
-    logger.Info(ctx, "hello guys, this is a info log")
+package main
+
+import (
+	"context"
+
+	"github.com/Hurricanezwf/zlog"
+)
+
+func main() {
+	appContext := zlog.WithServiceName(context.Background(), "app-demo")
+	logger := zlog.NewLogFactory().DefaultLogger(zlog.LevelDebug)
+
+	requestContext := zlog.WithTraceId(context.Background(), "696ce42f-a56c-40a7-accf-035671b81ca6")
+	NewModule(appContext, logger).DoSomething(requestContext)
+}
+
+type Module struct {
+	ctx    context.Context
+	logger zlog.Logger
+}
+
+func NewModule(ctx context.Context, logger zlog.Logger) *Module {
+	return &Module{
+		ctx:    zlog.WithModuleName(ctx, "main.Module"),
+		logger: logger,
+	}
+}
+
+func (m *Module) DoSomething(ctx context.Context) {
+	ctx = zlog.CopyContextValue(m.ctx, ctx)
+	m.logger.Info(ctx, "start to do something ...")
 }
 ```
