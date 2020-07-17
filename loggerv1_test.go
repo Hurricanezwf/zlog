@@ -36,3 +36,14 @@ func prepareContext() context.Context {
 	ctx = WithModuleName(ctx, "pkg.log")
 	return ctx
 }
+
+func BenchmarkLoggerv1(b *testing.B) {
+	b.ReportAllocs()
+
+	ctx := prepareContext()
+	logger := newLoggerV1(LevelDebug)
+
+	for i := 0; i < b.N; i++ {
+		logger.Debugf(ctx, "Hello %s, this is debugf", "guys")
+	}
+}
